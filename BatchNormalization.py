@@ -13,9 +13,34 @@ transform = transforms.Compose([
     # converts into PyTorch's tensor format
     transforms.ToTensor(),
     # rescales the image's pixel values 
-    transforms.Normalize((0,5,),(0,5,))
+    # transforms.Normalize(mean, std)
+    # This transformation will subtract the mean and divide the std
+    # grayscale img (MNIST) --> one channel, so a single val
+    # but for RGB imgs, need to specify values for all three 
+    transforms.Normalize((0.5,),(0.5,))
 ])
 
-# Load the MNIST dataset
+# Download the MNIST dataset
+trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
+testset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=False, transform=transform)
+
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
+testloader = torch.utils.data.DataLoader(trainset,batch_size=64,shuffle=True)
+
+class NetWithoutBN(torch.nn.Module):
+    def __init__(self):
+        # three linear layers
+        super(NetWithoutBN, self).__init__()
+        self.fc1 = torch.nn.Linear(28*28, 512)
+        self.fc2 = torch.nn.Linear(512, 256)
+        self.fc3 = torch.nn.Linear(256, 10)
 
 
+class NetWithBN(torch.nn.Module):
+    def __init__(self):
+        super(NetWithBN, self).__init__()
+        self.fc1 = torch.nn.Linear(28*28, 512)
+        self.bn1 = torch.nn.BatchNorm1d(512)
+        self.fc2 = torch.nn.Linear(512, 256)
+        self.bn2 = torch.nn.BatchNorm1d(256)
+        self.fc3 = torch.nn.Linear(256, 10)
