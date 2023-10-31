@@ -35,6 +35,12 @@ class NetWithoutBN(torch.nn.Module):
         self.fc2 = torch.nn.Linear(512, 256)
         self.fc3 = torch.nn.Linear(256, 10)
 
+    def forward(self,x):
+        x = x.view(-1, 28*28)
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
 
 class NetWithBN(torch.nn.Module):
     def __init__(self):
@@ -44,3 +50,10 @@ class NetWithBN(torch.nn.Module):
         self.fc2 = torch.nn.Linear(512, 256)
         self.bn2 = torch.nn.BatchNorm1d(256)
         self.fc3 = torch.nn.Linear(256, 10)
+    
+    def forward(self, x):
+        x = x.view(-1, 28*28)
+        x = self.bn(torch.relu(self.fc1(x)))
+        x = self.bn(torch.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
