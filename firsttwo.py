@@ -40,10 +40,30 @@ from nltk.tokenize import word_tokenize
 def preprocess(text):
     text = text.lower()
 
-    text = re.sub(r'')
+    text = re.sub(r'[^a-zA-Z]', '', text)
 
-    tokens = text.split()
+    tokens = word_tokenize(text)
 
-    stemmed = 
+    stop_words = set(stopwords.words('english'))
+    tokens = [w for w in tokens if not w in stop_words]
+    stemmer = PorterStemmer()
+    stemmed = [stemmer.stem(w) for w in tokens]
 
     return ' '.join(stemmed)
+
+# task 3: another preprocessing 
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+import re
+
+def secondpreprocess(text):
+    # lower 
+    text = text.lower()
+    # remove numbers
+    text = re.sub(r'\d+', '', text)
+    # tokenize text
+    tokens = word_tokenize(text)
+    # initialize lemmatizer and lemmatize the tokens
+    lemmatizer = WordNetLemmatizer()
+    lemmatized = [lemmatizer.lemmatize(w) for w in tokens]
+    return ' '.join(lemmatized)
