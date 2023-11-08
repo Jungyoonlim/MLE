@@ -2,6 +2,10 @@
 import pandas as pd
 import os 
 
+def load_data(filepath):
+    df = pd.read_csv(filepath)
+    return df 
+
 def read_csv(filepath):
     if os.path.isfile(filepath):
         try: 
@@ -67,3 +71,18 @@ def secondpreprocess(text):
     lemmatizer = WordNetLemmatizer()
     lemmatized = [lemmatizer.lemmatize(w) for w in tokens]
     return ' '.join(lemmatized)
+
+# task 4: data preprocessing pipeline
+'''
+Combine the steps of loading data and text preprocessing
+to create a seemless pipline to prepare my text data
+'''
+
+def dataprocess(filepath, text_column):
+    # load data
+    dataset = load_data(filepath)
+    dataset[text_column] = dataset[text_column].apply(preprocess)
+    print(dataset[text_column].head())
+    return dataset
+
+
