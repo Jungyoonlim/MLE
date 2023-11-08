@@ -19,7 +19,7 @@ class linear_regression:
             w = w - a * dw
             b = b - a * db 
             """
-            dw = (1/n_samples)* np.dot(X, (y_pred-y))
+            dw = (1/n_samples)* np.dot(X.T, (y_pred-y))
             db = (1/n_samples)* np.sum(y_pred-y)
 
             self.w = self.w-self.lr * dw 
