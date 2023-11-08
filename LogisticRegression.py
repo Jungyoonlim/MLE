@@ -12,7 +12,7 @@ class Logistic_Regression:
     
     def fit(self,X,y):
         n_samples, n_features = X.shape
-        self.w = np.zeros(self.features)
+        self.w = np.zeros(n_features)
         self.b = 0 
 
         for _ in range(self.iters):
@@ -27,5 +27,6 @@ class Logistic_Regression:
 
     def predict(self,X):
         linear_pred = np.dot(X, self.w) + self.b
-        pred = sigmoid(linear_pred)
-
+        y_pred = sigmoid(linear_pred)
+        class_pred = [0 if y<=0.5 else 1 for y in y_pred]
+        return class_pred 
