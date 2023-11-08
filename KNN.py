@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 
 def euclid(x1,x2):
     distance = np.sqrt(np.sum((x1-x2)**2))
@@ -21,6 +22,9 @@ class KNN:
         distances = [euclid(x,x_train) for x_train in self.X_train]
 
         # get the closest x 
-        
-        
-        # return a prediction 
+        k_indices = np.argsort(distances)[:self.k]
+        k_labels = [self.y_train[i] for i in k_indices]
+
+        # majority vote
+        most_common = Counter(k_labels).most_common()
+        return most_common
