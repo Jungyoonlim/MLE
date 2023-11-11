@@ -84,8 +84,21 @@ with strategy.scope():
     model = tf.keras.Sequential(...)
     model.compile(...)
 
+"""
+When we call model.fit, we will make a copy, known as a replica,
+of the model of both of the GPUs, and the CPU is responsible for 
+preparing the tf data set batches and sending the data to GPUs. 
+"""
 model.fit(train_data, epocs = 5)
 ```
 
+### Reducing Gradients
 
-Notes from: https://www.youtube.com/watch?v=S1tN9a4Proc&t=420s
+
+
+Notes from: 
+- https://www.youtube.com/watch?v=S1tN9a4Proc&t=420s
+- https://www.youtube.com/watch?v=hc0u4avAkuM
+- https://www.youtube.com/watch?v=ILBPCi6Il1U
+
+
