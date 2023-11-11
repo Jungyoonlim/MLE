@@ -6,7 +6,8 @@
 
 ## Data Parallelism vs. Model Parallelism 
 
-- Data Parallelism: Works with just about any model architecture -- widely adopted for dist. training. 
+### Data Parallelism
+Works with just about any model architecture -- widely adopted for dist. training. 
 
 Think about the batch size to understand data parallelism! 
 
@@ -29,8 +30,44 @@ Each GPU gets a separate slice of the data, they calculate the gradients, and th
 
 Core idea of data parallelism: More GPUs, your model is able to see more data one each training step. This means less time to finish an epoch -- a full pass through the training data. 
 
-- Model Parallelism: Best for models where there are independent parts of computation that you can run in parallel. 
+### Model Parallelism
 
+Best for models where there are independent parts of computation that you can run in parallel. 
+
+Put different layers of your model on different machines or devices. 
+
+X --> mat mul (gpu:0) --> add (gpu:1)
+
+Model parallelism works best for models where there are independent parts of computation that you can run in parallel.  
+
+
+### Combination of data and model parallelism
+
+X - split -> mat mul (gpu:0) --> add (gpu:1)
+  |
+  |________> mat mul (gpu:2) --> add (gpu:3)
 
 
 ## Synchronous and Asynchronous Data Parallelism 
+
+Synchronous and asynchronous refer to how the model parameters are updated. 
+
+```
+# how you can add distribution to TensorFlow code
+# Machine with 2 GPUs 
+BATCH_SIZE = 64
+
+train_data = tf.data.Dataset(...).batch(BATCH_SIZE)
+
+model = tf.keras.Sequential(...)
+model.compile(...)
+
+model.fit(train_data, epocs=5)
+```
+For this example,
+- Dataset size: 768
+- Batch size: 64
+- Steps per epoch = 768/64=12
+
+
+Notes from: https://www.youtube.com/watch?v=S1tN9a4Proc&t=420s
