@@ -42,11 +42,12 @@ Model parallelism works best for models where there are independent parts of com
 
 
 ### Combination of data and model parallelism
-
+```
 X - split -> mat mul (gpu:0) --> add (gpu:1)
   |
   |________> mat mul (gpu:2) --> add (gpu:3)
 
+```
 
 ## Synchronous and Asynchronous Data Parallelism 
 
@@ -68,6 +69,23 @@ For this example,
 - Dataset size: 768
 - Batch size: 64
 - Steps per epoch = 768/64=12
+
+Let's update to make use of the second GPU. 
+
+```
+strategy = tf.distribute.MirroredStrategy()
+
+BATCH_SIZE = 64
+GLOBAL_BATCH_SIZE = BATCH_SIZE * strategy.num_replicas_in_sync
+train_data = tf.data.Dataset(...).batch(GLOBAL_BATCH_SIZE)
+# Here, 32 would be the per replica batch size and 64 is a global batch size. 
+
+with strategy.scope():
+    model = tf.keras.Sequential(...)
+    model.compile(...)
+
+model.fit(train_data, epocs = 5)
+```
 
 
 Notes from: https://www.youtube.com/watch?v=S1tN9a4Proc&t=420s
