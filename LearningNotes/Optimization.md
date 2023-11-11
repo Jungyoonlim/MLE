@@ -2,8 +2,6 @@
 
 Let's learn everything about squeezing the most out of GPUs! 
 
-
-
 Notes from: 
 - [ ] https://developer.nvidia.com/blog/optimizing-gpu-utilization-with-nsight-compute-2021-3/#:~:text=,occupancy%20may%20represent%20kernels
 - [ ] https://developer.nvidia.com/blog/profiling-and-optimizing-deep-neural-networks-with-dlprof-and-pyprof/
