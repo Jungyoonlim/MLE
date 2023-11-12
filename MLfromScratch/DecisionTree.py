@@ -7,7 +7,7 @@ class Node:
         self.threshold = threshold
         self.left = left
         self.right = right
-        self.value = None
+        self.value = value
 
     def is_leaf_node(self): return self.value is not None
 
@@ -36,6 +36,8 @@ class DecisionTree:
 
         # find the best split
         best_thresh, best_feature = self._best_split(X, y, feat_idxs)
+
+        if best_feature is None: return Node(value=self._most_common_label(y))
 
         # create child nodes
         left_idxs, right_idxs = self._split(X[:, best_feature],best_thresh)
@@ -75,7 +77,7 @@ class DecisionTree:
         # calculate the weighted avg. entropy of children
         n = len(y)
         n_l, n_r = len(left_idxs), len(right_idxs)
-        e_l, e_r = self.entropy(y[left_idxs]), self._entropy(y[right_idxs])
+        e_l, e_r = self._entropy(y[left_idxs]), self._entropy(y[right_idxs])
         child_entropy = (n_l/n) * e_l + (n_r/n) * e_r 
 
         # calculate the IG 
@@ -102,7 +104,7 @@ class DecisionTree:
     def predict(self, X): return np.array([self._traverse_tree(x) for x in X])
     
     def _traverse_tree(self, x, node):
-        if node.is_leaf_node(): return node.value()
+        if node.is_leaf_node(): return node.value
         if x[node.feature] <= node.threshold: 
             return self._traverse_tree(x, node.left)
         return self._traverse_tree(x, node.right)
