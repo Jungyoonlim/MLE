@@ -10,7 +10,7 @@ class RandomForest:
         self.n_feature = n_feature
         self.trees = []
     
-    def fit(self):
+    def fit(self, X, y):
         self.trees = []
         for _ in range(self.n_trees):
             tree = DecisionTree(max_depth=self.max_depth,
