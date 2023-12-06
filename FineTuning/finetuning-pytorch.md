@@ -78,7 +78,7 @@ for param in model.parameters():
 num_classes = 10
 model.fc = nn.Linear(model.fc.in_features, num_classes) 
 
-### 7. Define model floating-point precision 
+### 6. Define model floating-point precision 
 i) 32-bit (float32) 
 - Wide dynamic range and high numerical precision 
 
@@ -127,7 +127,7 @@ for epoch in range(num_epochs):
 			print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_loader)} | Loss: {loss.item():.4f}")
 ```
 
-### 8. Training and Validation Mode 
+### 7. Training and Validation Mode 
 - Training mode
     - Enables specific operations that are required during the training process e.g. computing gradients, updating parameters, applying regularization techniques (dropout). 
 - Validation mode
@@ -149,7 +149,7 @@ if torch.cuda.device_count() > 1:
 # Define your loss fn and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
-
+```
 
 
 
