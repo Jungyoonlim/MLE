@@ -1,4 +1,4 @@
-Fine-tuning in PyTorch 
+# Fine-tuning in PyTorch 
 
 https://rumn.medium.com/part-1-ultimate-guide-to-fine-tuning-in-pytorch-pre-trained-model-and-its-configuration-8990194b71e
 
@@ -9,18 +9,18 @@ Defining a model takes
 - setting the desired flaoting point precision 
 - determining which layers to freeze or fine-tune 
 
-1. Loading a pre-trained model
+## 1. Loading a pre-trained model
     1. Have a clear understanding of your specific problem and choose an appropriate architecture. 
         1. e.g. fine-tuning for classification and low latency is a priority —> MobileNet would be a good choice.
         2. Key modification required — to adjust the fully connected FC layer 
-2. Modifying model head 
+## 2. Modifying model head 
     1. modify the model’s head to adapt to the new task and utilize the valuable features it has learned 
-3. Setting optimizer, learning rate, weight decay, and momentum 
+## 3. Setting optimizer, learning rate, weight decay, and momentum 
     1. learning rate, loss function, and optimizer are interrelated components that collectively influence the model’s ability to adapt to the new task while leveraging the knowledge acquired from pre-training 
     2. Optimizers — https://towardsdatascience.com/7-tips-to-choose-the-best-optimizer-47bb9c1219e determines the algorithm to be used to update the model’s parameters based on the gradients computed during backprop. e.g. SGD, Adam, RMSprop … different parameters update rules and convergence properties. 
         1. Weight decay (L2 regularization) — prevent overfitting and encourage the model to learn simpler and momentum (Accelerate convergence and escape local minima) 
     3. Learning Rate — A hyperparameter that determines the step size at each iteration during optimization. Controls how much the model’s parameters are updated in response to the calculated gradients during backprop. Setting it too high can cause the optimization process to oscillate or diverge while setting it too low can cause slow convergence or getting trapped in local minima. 
-4. Choosing loss functions
+## 4. Choosing loss functions
     1. Measures the difference or gap between the model’s predicted outputs and the actual correct answers. 
     2. A way to understand how well the model is performing on the task. 
     3. e.g. for classification tasks, cross-entropy loss is commonly used; regression — mean squared error. 
@@ -32,30 +32,30 @@ Defining a model takes
 
 L2 
 
-# Define a loss function
+### Define a loss function
 criterion = nn.CrossEntropyLoss()
 
-# L2 regularization 
+### L2 regularization 
 optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=0.01)
 
 L1
 
-# Define a loss function 
+### Define a loss function 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
-# Inside the training loop 
+### Inside the training loop 
 optimizer.zero_grad()
 outputs = model(inputs)
 loss = criterion(outputs, targets)
 
-# L1 Regularization 
+### L1 Regularization 
 regularization_loss = 0.0
 for param in model.parameters():
 	regularization_loss += torch.norm(param, 1)
 loss += 0.01 * regularization_loss
 
-5. Freezing Full or Partial Network
+## 5. Freezing Full or Partial Network
     1. Freezing = fixing the weight of specific layer or entire network during fine tuning process. 
     2. Network freezing allows us to retain the knowledge captured by the pre-trained model while only updating certain layers to adapt to the target task.
     3. Deciding whether you should freeze all layers or partial layers of the pre-trained model before fine-tuning boils down to your specific target task. 
@@ -78,7 +78,7 @@ for param in model.parameters():
 num_classes = 10
 model.fc = nn.Linear(model.fc.in_features, num_classes) 
 
-7. Define model floating-point precision 
+### 7. Define model floating-point precision 
 i) 32-bit (float32) 
 - Wide dynamic range and high numerical precision 
 
@@ -127,7 +127,7 @@ for epoch in range(num_epochs):
 			print(f"Epoch {epoch+1}/{num_epochs} | Batch {batch_idx}/{len(train_loader)} | Loss: {loss.item():.4f}")
 ```
 
-8. Training and Validation Mode 
+### 8. Training and Validation Mode 
 - Training mode
     - Enables specific operations that are required during the training process e.g. computing gradients, updating parameters, applying regularization techniques (dropout). 
 - Validation mode
